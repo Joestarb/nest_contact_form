@@ -11,7 +11,7 @@ const options = {
       description: 'Documentación de la API de Mensajes con Express y Swagger',
     },
   },
-  apis: ['./src/message/message.controller.js'], // Archivos donde están las rutas
+  apis: ['./src/message/message.controller.js'], 
 };
 
 const swaggerSpec = swaggerJSDoc(options);

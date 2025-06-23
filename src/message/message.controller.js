@@ -1,4 +1,3 @@
-// src/message/message.controller.js
 const express = require('express');
 const router = express.Router();
 const messageService = require('./message.service');
@@ -24,6 +23,8 @@ const messageService = require('./message.service');
  *                     type: string
  *                   email:
  *                     type: string
+ *                   telefono:
+ *                     type: string
  *                   mensaje:
  *                     type: string
  */
@@ -48,6 +49,8 @@ router.get('/', async (req, res) => {
  *                 type: string
  *               email:
  *                 type: string
+ *               telefono:
+ *                 type: string
  *               mensaje:
  *                 type: string
  *     responses:
@@ -64,12 +67,14 @@ router.get('/', async (req, res) => {
  *                   type: string
  *                 email:
  *                   type: string
+ *                 telefono:
+ *                   type: string
  *                 mensaje:
  *                   type: string
  */
 router.post('/', async (req, res) => {
-  const { nombre, email, mensaje } = req.body;
-  const newMessage = await messageService.create({ nombre, email, mensaje });
+  const { nombre, email, telefono, mensaje } = req.body;
+  const newMessage = await messageService.create({ nombre, email, telefono, mensaje });
   res.status(201).json(newMessage);
 });
 

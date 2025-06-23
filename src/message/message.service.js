@@ -1,13 +1,19 @@
-// src/message/message.service.js
-const messages = [];
+const db = require('./sqlite');
 
 module.exports = {
   getAll: async () => {
-    return messages;
+    const stmt = db.prepare('SELECT * FROM message ORDER BY createdAt DESC');
+    return stmt.all();
   },
-  create: async ({ nombre, email, mensaje }) => {
-    const newMessage = { id: messages.length + 1, nombre, email, mensaje };
-    messages.push(newMessage);
-    return newMessage;
-  },
+
+  create: async ({ nombre, email, telefono, mensaje }) => {
+    const stmt = db.prepare(`
+      INSERT INTO message (nombre, email, telefono, mensaje)
+      VALUES (?, ?, ?, ?)
+    `);
+    const result = stmt.run(nombre, email, telefono, mensaje);
+
+    const getInserted = db.prepare('SELECT * FROM message WHERE id = ?');
+    return getInserted.get(result.lastInsertRowid);
+  }
 };
