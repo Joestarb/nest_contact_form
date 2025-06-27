@@ -5,6 +5,9 @@ const messageRoutes = require('./src/message/message.controller');
 const swaggerSetup = require('./swagger');
 
 const app = express();
+// Servir archivos estáticos del frontend desde la carpeta dist
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(cors({
   origin: '*', 
@@ -15,6 +18,11 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use('/message', messageRoutes);
 swaggerSetup(app);
+
+// Redirigir todas las rutas que no sean API al index.html del frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
