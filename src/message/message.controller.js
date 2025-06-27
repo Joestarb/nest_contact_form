@@ -53,6 +53,8 @@ router.get('/', async (req, res) => {
  *                 type: string
  *               mensaje:
  *                 type: string
+ *               validate_captcha:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Mensaje creado
@@ -73,8 +75,14 @@ router.get('/', async (req, res) => {
  *                   type: string
  */
 router.post('/', async (req, res) => {
-  const { nombre, email, telefono, mensaje } = req.body;
-  const newMessage = await messageService.create({ nombre, email, telefono, mensaje });
+  const { nombre, email, telefono, mensaje, captcha } = req.body;
+  const newMessage = await messageService.create({
+    nombre,
+    email,
+    telefono,
+    mensaje,
+    captcha,
+  });
   res.status(201).json(newMessage);
 });
 

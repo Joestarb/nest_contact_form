@@ -8,6 +8,7 @@ db.exec(`
     email TEXT NOT NULL,
     telefono TEXT NOT NULL,
     mensaje TEXT NOT NULL,
+    validate_captcha BOOLEAN DEFAULT FALSE,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 `);
