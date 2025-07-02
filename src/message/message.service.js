@@ -16,7 +16,7 @@ module.exports = {
       mensaje,
       captcha,
     );
-    const RECAPTCHA_SECRET = '6LeV2G4rAAAAAJK0YK86l_O5n9_E45vlNUzj3HrJ';
+    const RECAPTCHA_SECRET = '6LeadnUrAAAAAEMpgOZ8_t7E-ftfWod6dZjG3bFY';
     const response = await fetch(
       'https://www.google.com/recaptcha/api/siteverify',
       {
