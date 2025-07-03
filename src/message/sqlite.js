@@ -26,6 +26,8 @@ db.exec(`
     user_id INTEGER NOT NULL,
     token TEXT NOT NULL,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expiresAt DATETIME NOT NULL,
+    UNIQUE(token),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   );
 

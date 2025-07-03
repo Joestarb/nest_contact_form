@@ -1,4 +1,5 @@
 const db = require('./sqlite');
+const nodemailer = require('nodemailer');
 const fetch = require('node-fetch');
 
 module.exports = {
@@ -38,6 +39,31 @@ module.exports = {
     const result = stmt.run(nombre, email, telefono, mensaje, captchaValido);
 
     const getInserted = db.prepare('SELECT * FROM message WHERE id = ?');
-    return getInserted.get(result.lastInsertRowid);
+    const insertedMessage = getInserted.get(result.lastInsertRowid);
+
+    // Configuración de nodemailer (ejemplo con Gmail)
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'arbeydzib1@gmail.com', // Cambia esto por tu correo
+        pass: 'qdtjwntyzuuylbgi', // Usa una contraseña de aplicación
+      },
+    });
+
+    const mailOptions = {
+      from: 'arbeydzib1@gmail.com',
+      to: 'arbeydzib1@gmail.com', // Puedes cambiarlo por cualquier destinatario
+      subject: 'Nuevo mensaje de contacto',
+      text: `Nombre: ${nombre}\nEmail: ${email}\nTeléfono: ${telefono}\nMensaje: ${mensaje}`,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log('Correo enviado correctamente');
+    } catch (error) {
+      console.error('Error al enviar el correo:', error);
+    }
+
+    return insertedMessage;
   },
 };
