@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); 
+const cors = require('cors');
 const messageRoutes = require('./src/message/message.controller');
+const registerRoutes = require('./src/register/register.controller');
+const authRoutes = require('./src/auth/auth.controller');
 const swaggerSetup = require('./swagger');
 
 const app = express();
@@ -9,14 +11,18 @@ const app = express();
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.use(cors({
-  origin: '*', 
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
-}));
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+  }),
+);
 
 app.use(bodyParser.json());
 app.use('/message', messageRoutes);
+app.use('/register', registerRoutes);
+app.use('/auth', authRoutes);
 swaggerSetup(app);
 
 // Redirigir todas las rutas que no sean API al index.html del frontend

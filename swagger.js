@@ -11,7 +11,11 @@ const options = {
       description: 'Documentación de la API de Mensajes con Express y Swagger',
     },
   },
-  apis: ['./src/message/message.controller.js'], 
+  apis: [
+    './src/message/message.controller.js',
+    './src/register/register.controller.js',
+    './src/auth/auth.controller.js',
+  ],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
