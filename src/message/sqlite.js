@@ -9,7 +9,7 @@ db.exec(`
     telefono TEXT NOT NULL,
     mensaje TEXT NOT NULL,
     validate_captcha BOOLEAN DEFAULT FALSE,
-    validate_view BOOLEAN DEFAULT FALSE,
+    validate_view TEXT DEFAULT 'NUEVO',
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 

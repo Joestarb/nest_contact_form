@@ -104,7 +104,7 @@ router.post('/', async (req, res) => {
  *             type: object
  *             properties:
  *               validate_view:
- *                 type: boolean
+ *                 type: string
  *     responses:
  *       200:
  *         description: Mensaje actualizado
@@ -113,13 +113,16 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { validate_view } = req.body;
 
-  // Validar que validate_view sea un booleano
-  if (typeof validate_view !== 'boolean') {
-    return res.status(400).json({ error: 'validate_view debe ser un booleano' });
+  // Validar que validate_view sea un string
+  if (typeof validate_view !== 'string') {
+    return res.status(400).json({ error: 'validate_view debe ser un string' });
   }
 
   try {
-    const updatedMessage = await messageService.validateMesage(id, validate_view);
+    const updatedMessage = await messageService.validateMesage(
+      id,
+      validate_view,
+    );
     if (!updatedMessage) {
       return res.status(404).json({ error: 'Mensaje no encontrado' });
     }
