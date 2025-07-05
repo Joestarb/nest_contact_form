@@ -1,3 +1,5 @@
+// Cargar variables de entorno desde .env en la raíz del proyecto
+require('dotenv').config({ path: require('path').resolve(__dirname, '.env') });
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');

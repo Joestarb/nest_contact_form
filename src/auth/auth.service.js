@@ -17,34 +17,46 @@ module.exports = {
     if (!isMatch) return null;
     const { password: _, ...userSafe } = user;
 
-    // Generar JWT y expiración (1 hora)
-    const expiresIn = 60 * 60; // 1 hora en segundos
-    const secret = process.env.JWT_SECRET || 'secret_key';
+    // Generar JWT y expiración (24 horas)
+    const expiresIn = 24 * 60 * 60; // 24 horas en segundos
+    const secret = process.env.JWT_SECRET;
     const token = jwt.sign({ id: user.id, email: user.email }, secret, {
       expiresIn,
     });
     const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
 
+    // Insertar el token en la tabla users_tokens
+    const insertToken = db.prepare(`
+      INSERT INTO users_tokens (user_id, token, expiresAt)
+      VALUES (?, ?, ?)
+    `);
+    insertToken.run(user.id, token, expiresAt);
+
     return { ...userSafe, token, expiresAt };
   },
 
   /**
-   * Verifica si un JWT es válido y no ha expirado
+   * Verifica si un token existe en la tabla users_tokens y no ha expirado
    * @param {string} token
    * @returns {object|null} El usuario si el token es válido, o null si no lo es
    */
   verifyToken: (token) => {
-    try {
-      const secret = process.env.JWT_SECRET || 'secret_key';
-      const decoded = jwt.verify(token, secret);
-      const stmt = db.prepare(
-        'SELECT id, nombre, email, telefono FROM users WHERE id = ?',
-      );
-      const user = stmt.get(decoded.id);
-      if (!user) return null;
-      return { ...user, token };
-    } catch (err) {
-      return null;
-    }
+    const stmt = db.prepare(`
+      SELECT ut.*, u.nombre, u.email, u.telefono FROM users_tokens ut
+      JOIN users u ON ut.user_id = u.id
+      WHERE ut.token = ?
+    `);
+    const row = stmt.get(token);
+    if (!row) return null;
+    if (new Date(row.expiresAt) < new Date()) return null;
+    // Retornar datos del usuario y token
+    return {
+      id: row.user_id,
+      nombre: row.nombre,
+      email: row.email,
+      telefono: row.telefono,
+      token: row.token,
+      expiresAt: row.expiresAt,
+    };
   },
 };
