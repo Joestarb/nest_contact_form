@@ -53,6 +53,8 @@ router.post('/login', async (req, res) => {
  * /auth/verify-token:
  *   post:
  *     summary: Verifica si un token es válido y no ha expirado
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

@@ -10,6 +10,16 @@ const options = {
       version: '1.0.0',
       description: 'Documentación de la API de Mensajes con Express y Swagger',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
   },
   apis: [
     './src/message/message.controller.js',
