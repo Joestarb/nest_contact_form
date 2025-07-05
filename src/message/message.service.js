@@ -66,4 +66,15 @@ module.exports = {
 
     return insertedMessage;
   },
+
+  validateMesage: async (id) => {
+ try {
+      const stmt = db.prepare('UPDATE message SET validate_view = 1 WHERE id = ?');
+      stmt.run(id);
+      return { success: true, message: 'Mensaje validado correctamente' };
+    } catch (error) {
+      console.error('Error al validar el mensaje:', error);
+      return { success: false, message: 'Error al validar el mensaje' };
+    }
+  },
 };

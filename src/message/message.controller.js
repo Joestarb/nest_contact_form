@@ -85,5 +85,48 @@ router.post('/', async (req, res) => {
   });
   res.status(201).json(newMessage);
 });
+/**
+ * @swagger
+ * /message/{id}:
+ *   put:
+ *     summary: Actualiza la vista de un mensaje
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               validate_view:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Mensaje actualizado
+ */
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { validate_view } = req.body;
 
+  // Validar que validate_view sea un booleano
+  if (typeof validate_view !== 'boolean') {
+    return res.status(400).json({ error: 'validate_view debe ser un booleano' });
+  }
+
+  try {
+    const updatedMessage = await messageService.validateMesage(id, validate_view);
+    if (!updatedMessage) {
+      return res.status(404).json({ error: 'Mensaje no encontrado' });
+    }
+    res.json(updatedMessage);
+  } catch (error) {
+    console.error('Error al actualizar el mensaje:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
 module.exports = router;
