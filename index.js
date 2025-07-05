@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use(
   cors({
     origin: '*',
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
   }),
 );
